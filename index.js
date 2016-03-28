@@ -5,7 +5,7 @@ let DB = process.env.DB || require('./.config').DB
 let mongoose = require('mongoose')
 mongoose.connect(DB)
 
-let bodyParser = require('body-parser')
+// let bodyParser = require('body-parser')
 let express = require('express')
 let app = express()
 
@@ -14,7 +14,7 @@ let publicRouter = express.Router()
 require(__dirname + '/routes/login_route')(publicRouter)
 require(__dirname + '/routes/projects_route')(publicRouter)
 
-app.use(bodyParser.json())
+// app.use(bodyParser.json())
 
 app.use(publicRouter)
 

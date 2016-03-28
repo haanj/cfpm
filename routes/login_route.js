@@ -1,7 +1,9 @@
 'use strict'
 let User = require('../models/user_module')
+let bodyParser = require('body-parser')
 
 module.exports = (router) => {
+  router.use(bodyParser.json())
   router.route('/login')
     .get((req, res) => {
       console.log('/login hit')
