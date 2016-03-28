@@ -25,6 +25,9 @@ function uploadFile(path) {
     .attach('file', path)
     .end((err, res) => {
       console.log(res.body)
+      fs.unlink(path, () => {
+        console.log('upload complete')
+      })
     })
 }
 
@@ -34,12 +37,12 @@ function archiveDirectory(directory) {
   archive.pipe(output)
   archive.directory(directory)
   archive.finalize()
-  archive.end(() => {
-    // uploadFile('target.zip')
-    console.log('yo')
+
+  output.on('close', () => {
+    uploadFile('target.zip')
   })
 }
 
-archiveDirectory('./toUpload')
+archiveDirectory('./project')
 
 // uploadFile(__dirname + '/' + process.argv[2])
