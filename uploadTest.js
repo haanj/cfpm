@@ -3,8 +3,9 @@ let fs = require('fs')
 let request = require('superagent')
 let TOKEN = process.env.TOKEN
 let url = 'localhost:3000'
+let archiver = require('archiver')
 
-function readFile(path) {
+function uploadFile(path) {
   // fs.createReadStream(path)
   //   .pipe(
   //     request
@@ -20,12 +21,25 @@ function readFile(path) {
     .set('authorization', 'token ' + TOKEN)
     .set('projectname', 'testproject-name')
     .set('author', 'haanj')
-    .set('filename', process.argv[2])
-    .attach('file', process.argv[2])
-    .attach('file', 'testDocument.txt')
+    .set('filename', path)
+    .attach('file', path)
     .end((err, res) => {
       console.log(res.body)
     })
 }
 
-readFile(__dirname + '/' + process.argv[2])
+function archiveDirectory(directory) {
+  let output = fs.createWriteStream('target.zip')
+  let archive = archiver.create('zip')
+  archive.pipe(output)
+  archive.directory(directory)
+  archive.finalize()
+  archive.end(() => {
+    // uploadFile('target.zip')
+    console.log('yo')
+  })
+}
+
+archiveDirectory('./toUpload')
+
+// uploadFile(__dirname + '/' + process.argv[2])

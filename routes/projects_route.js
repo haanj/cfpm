@@ -16,9 +16,8 @@ module.exports = (router) => {
     .post((req, res, next) => {
       let form = new formidable.IncomingForm()
       form.uploadDir = __dirname + '/../data/'
-
+      form.keepExtensions = true
       form.parse(req, function(err, fields, files) {
-        console.log(files)
         res.writeHead(200, {'content-type': 'text/plain'});
         res.write('received upload:\n\n');
         res.end(util.inspect({fields: fields, files: files}));
