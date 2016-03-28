@@ -1,8 +1,8 @@
 'use strict'
-let User = require('../models/user_module')
-let authenticate = require('../lib/authenticate')
+// let User = require('../models/user_module')
+// let authenticate = require('../lib/authenticate')
 let fs = require('fs')
-let multer = require('multer')
+let formidable = require('formidable')
 
 module.exports = (router) => {
 
@@ -11,12 +11,32 @@ module.exports = (router) => {
       console.log('/projects hit with get')
       res.json('Hello login')
     })
-    .post(authenticate)
+    // .post((req, res) => console.log('post to /projects'))
+    // .post((req, res, next) => {
+    //   let form = new formidable.IncomingForm();
+    //
+    //   form.parse(req, function(err, fields, files) {
+    //     res.writeHead(200, {'content-type': 'text/plain'});
+    //     res.write('received upload:\n\n');
+    //     res.end(util.inspect({fields: fields, files: files}));
+    //   });
+    //   form.on('file', function(name, file) {
+    //     console.log(name, file)
+    //   })
+    //
+    //   form.on('end', () => {
+    //     next();
+    //   })
+    //
+    // })
     .post((req, res) => {
-      console.log('/projects hit with post')
-      console.log(req.headers)
-      console.log(req)
-      // fs.writeFileSync(__dirname + '/../data/'+req.headers.filename, buffer, res.json('Hello login'))
-      fs.createWriteStream('/../data/'+req.headers.filename).pipe(req.body);
+      let body = ''
+      req.on('data', (chunk) => {
+        body += chunk
+      })
+      req.on('end', () => {
+        console.log(req.body)
+        fs.writeFile(__dirname + '/../data/'+req.headers.filename, body, () => res.json('post received'))
+      })
     })
 }

@@ -5,33 +5,26 @@ let TOKEN = process.env.TOKEN
 let url = 'localhost:3000'
 
 function readFile(path) {
-  // fs.readFile(path, (err, fileData) => {
-  //   if (err) throw err
-  //   console.log(fileData)
-  //   postFile(path, fileData)
-  // });
-  fs.createReadStream(path)
-    .pipe(
-      request
-        .post(url + '/projects')
-        .set('authorization', 'token ' + TOKEN)
-        .set('projectname', 'testproject-name')
-        .set('author', 'haanj')
-        .set('filename', process.argv[2])
-    )
-}
+  // fs.createReadStream(path)
+  //   .pipe(
+  //     request
+  //       .post(url + '/projects')
+  //       .set('authorization', 'token ' + TOKEN)
+  //       .set('projectname', 'testproject-name')
+  //       .set('author', 'haanj')
+  //       .set('filename', process.argv[2])
+  //   )
 
-
-function postFile(path, fileData) {
   request
     .post(url + '/projects')
     .set('authorization', 'token ' + TOKEN)
     .set('projectname', 'testproject-name')
     .set('author', 'haanj')
     .set('filename', process.argv[2])
-    .send(fileData)
-    .end((err, res)=> {
-      console.log(err)
+    .attach('file', process.argv[2])
+    .attach('file', 'testDocument.txt')
+    .end((err, res) => {
+      console.log(res.body)
     })
 }
 
