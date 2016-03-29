@@ -1,6 +1,5 @@
 'use strict'
-// let User = require('../models/user_module')
-// let authenticate = require('../lib/authenticate')
+let authenticate = require('../lib/authenticate')
 let fs = require('fs')
 let formidable = require('formidable')
 let util = require('util')
@@ -12,7 +11,11 @@ module.exports = (router) => {
       console.log('/projects hit with get')
       res.json('Hello login')
     })
-    // .post((req, res) => console.log('post to /projects'))
+    .post((req, res, next) => {
+      console.log('/projects hit with post request')
+      next()
+    })
+    .post(authenticate)
     .post((req, res, next) => {
       let form = new formidable.IncomingForm()
       form.uploadDir = __dirname + '/../data/'
@@ -23,19 +26,5 @@ module.exports = (router) => {
         res.end(util.inspect({fields: fields, files: files}));
       });
 
-      // form.on('end', () => {
-      //   res.json('thanks')
-      // })
-
     })
-    // .post((req, res) => {
-    //   let body = ''
-    //   req.on('data', (chunk) => {
-    //     body += chunk
-    //   })
-    //   req.on('end', () => {
-    //     console.log(body)
-    //     fs.writeFile(__dirname + '/../data/'+req.headers.filename, body, () => res.json('post received'))
-    //   })
-    // })
 }
