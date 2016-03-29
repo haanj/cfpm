@@ -8,7 +8,7 @@ let archiver = require('archiver')
 function uploadFile(path) {
   request
     .post(url + '/projects')
-    // .set('authorization', 'token ' + TOKEN)
+    .set('authorization', 'token ' + TOKEN)
     .set('projectname', 'testproject-name')
     .set('version', '0.1.10')
     .set('author', 'haanj')
