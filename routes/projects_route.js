@@ -58,6 +58,7 @@ module.exports = (router) => {
     })
     .put(authenticate)
     .put(projectLookup)
+    // TODO: dont allow updates to non-existing packages
     .put((req, res, next) => {
       console.log(req.newVersion)
       console.log(req.currentVersion)
