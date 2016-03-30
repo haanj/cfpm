@@ -7,15 +7,15 @@ let archiver = require('archiver')
 
 function uploadFile(path) {
   request
-    .put(url + '/projects')
+    .post(url + '/projects')
     .set('authorization', 'token ' + TOKEN)
-    .set('projectname', 'testproject-three')
-    .set('version', '0.13.12')
+    .set('projectname', 'testproject-four')
+    .set('version', '1.13.12')
     .attach('file', path)
     .end((err, res) => {
       console.log(res.body)
       if (err) return console.log('upload unsuccessful:')
-      fs.unlink(path, () => {
+      fs.unlink(path, ()   => {
         console.log('fin')
       })
     })

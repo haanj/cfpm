@@ -30,7 +30,7 @@ function downloadVersion(directory) {
     .get(url + '/projects')
     .set('projectname', 'testproject-three')
     // .set('version', '0.13.11')
-    .set('version', 'blah')
+    .set('version', 'default')
     .buffer(true)
     .parse(binaryParser)
     .end(function(err, res) {
