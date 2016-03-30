@@ -10,13 +10,13 @@ function uploadFile(path) {
     .put(url + '/projects')
     .set('authorization', 'token ' + TOKEN)
     .set('projectname', 'testproject-three')
-    .set('version', '0.12.11')
+    .set('version', '0.13.11')
     .attach('file', path)
     .end((err, res) => {
       console.log(res.body)
       if (err) return console.log('upload unsuccessful:')
       fs.unlink(path, () => {
-        console.log('upload complete')
+        console.log('fin')
       })
     })
 }

@@ -60,14 +60,15 @@ module.exports = (router) => {
     .put(projectLookup)
     // TODO: dont allow updates to non-existing packages
     .put((req, res, next) => {
+      // checks that user is original author
+      if (req.user.userName != req.currentAuthor) return res.json('Update rejected: incorrect user')
+
       console.log(req.newVersion)
       console.log(req.currentVersion)
-      if (req.newVersion.major <= req.currentVersion.major) {
-        if (req.newVersion.minor <= req.currentVersion.minor) {
-          if(req.newVersion.patch <= req.currentVersion.patch) {
-            return res.json('Update rejected: needs newer version number')
-          }
-        }
+      if (req.newVersion.major <= req.currentVersion.major &&
+          req.newVersion.minor <= req.currentVersion.minor &&
+          req.newVersion.patch <= req.currentVersion.patch) {
+        return res.json('Update rejected: needs newer version number')
       }
       console.log('okay to update')
       next()

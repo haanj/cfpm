@@ -29,3 +29,6 @@ module.exports = User
 // test users
 let newUser = new User({userName: 'haanj', name: 'Joshua', password: 'password123'})
 newUser.save()
+
+let newUser2 = new User({userName: 'seth', name: 'seth', password: 'seth'})
+newUser2.save()
