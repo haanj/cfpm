@@ -1,19 +1,16 @@
 'use strict'
+let path = require('path')
 let authenticate = require('../lib/authenticate')
 let projectLookup = require('../lib/projectLookup')
 let addPackage = require('../lib/addPackage')
 let updatePackage =require('../lib/updatePackage')
-// let fs = require('fs')
+let fs = require('fs')
 let formidable = require('formidable')
 let util = require('util')
 
 module.exports = (router) => {
   // Accepts new projects
   router.route('/projects')
-    .get((req, res) => {
-      console.log('/projects hit with get')
-      res.json('Hello login')
-    })
     .post((req, res, next) => {
       console.log('/projects hit with post request')
       next()
@@ -46,10 +43,10 @@ module.exports = (router) => {
         let archiveName = path.substring(path.lastIndexOf('upload'))
         req.archiveUri = 'data/' + archiveName
         addPackage(req)
-        res.writeHead(200, {'content-type': 'text/plain'});
-        res.write('received upload:\n\n');
-        res.end(util.inspect({fields: fields, files: files}));
-      });
+        res.writeHead(200, {'content-type': 'text/plain'})
+        res.write('received upload:\n\n')
+        res.end(util.inspect({fields: fields, files: files}))
+      })
     })
 
     .put((req, res, next) => {
@@ -83,8 +80,30 @@ module.exports = (router) => {
         let archiveName = path.substring(path.lastIndexOf('upload'))
         req.archiveUri = 'data/' + archiveName
         updatePackage(req)
-        res.writeHead(200, {'content-type': 'text/plain'});
-        res.write('received upload:\n\n');
-        res.end(util.inspect({fields: fields, files: files}));
-      });
-    })}
+        res.writeHead(200, {'content-type': 'text/plain'})
+        res.write('received upload:\n\n')
+        res.end(util.inspect({fields: fields, files: files}))
+      })
+    })
+    .get((req, res, next) => {
+      console.log('/projects hit with get')
+      next()
+    })
+    .get(projectLookup)
+    // gets uri of requested file
+    .get((req, res, next) => {
+      let Archive = require('../models/archive_module')
+      Archive.findOne({_id: req.currentVersion.archive})
+        .then((archive) => {
+          req.downloadUri = archive.uri
+          next()
+        })
+    })
+    .get((req, res) => {
+      console.log(req.downloadUri)
+      res.sendFile(path.resolve(__dirname + '/../' + req.downloadUri), (err) => {
+        if (err) throw err
+      })
+    })
+
+}
