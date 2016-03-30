@@ -10,7 +10,7 @@ function uploadFile(path) {
     .put(url + '/projects')
     .set('authorization', 'token ' + TOKEN)
     .set('projectname', 'testproject-three')
-    .set('version', '0.13.11')
+    .set('version', '0.13.12')
     .attach('file', path)
     .end((err, res) => {
       console.log(res.body)

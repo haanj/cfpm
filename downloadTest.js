@@ -23,6 +23,30 @@ function downloadCurrent(directory) {
       })
     })
 }
+
+function downloadVersion(directory) {
+  console.log(directory)
+  request
+    .get(url + '/projects')
+    .set('projectname', 'testproject-three')
+    // .set('version', '0.13.11')
+    .set('version', 'blah')
+    .buffer(true)
+    .parse(binaryParser)
+    .end(function(err, res) {
+      if (err) return console.log('download unsuccessful')
+      console.log(res.headers)
+      console.log('res=', res.body)
+      fs.writeFile('archive.zip', res.body, (err) => {
+        if (err) throw err
+        console.log('writing complete')
+        unpackage(directory)
+      })
+    })
+}
+
+
+
 // http://stackoverflow.com/questions/13573315/read-response-output-buffer-stream-with-supertest-superagent-on-node-js-server
 function binaryParser(res, callback) {
   res.setEncoding('binary')
@@ -49,4 +73,4 @@ function unpackage(directory) {
     )
 }
 
-downloadCurrent(process.cwd())
+downloadVersion(process.cwd())
