@@ -5,24 +5,6 @@ let request = require('superagent')
 let url = 'localhost:3000'
 let unzip = require('unzip')
 
-function downloadCurrent(directory) {
-  console.log(directory)
-  request
-    .get(url + '/projects')
-    .set('projectname', 'testproject-three')
-    .buffer(true)
-    .parse(binaryParser)
-    .end(function(err, res) {
-      if (err) return console.log('download unsuccessful')
-      console.log(res.headers)
-      console.log('res=', res.body)
-      fs.writeFile('archive.zip', res.body, (err) => {
-        if (err) throw err
-        console.log('writing complete')
-        unpackage(directory)
-      })
-    })
-}
 
 function downloadVersion(directory) {
   console.log(directory)

@@ -7,10 +7,10 @@ let archiver = require('archiver')
 
 function uploadFile(path) {
   request
-    .post(url + '/projects')
+    .put(url + '/projects')
     .set('authorization', 'token ' + TOKEN)
     .set('projectname', 'testproject-four')
-    .set('version', '1.13.12')
+    .set('version', '1.13.14')
     .attach('file', path)
     .end((err, res) => {
       console.log(res.body)

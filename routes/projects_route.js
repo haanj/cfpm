@@ -29,7 +29,7 @@ module.exports = (router) => {
         console.log('Package doesn\'t exist')
         next()
       } else {
-        res.json('package already exists')
+        return res.status(400).json({msg: 'Package already exists'})
       }
     })
     // Parses and stores new file and adds uri to req
@@ -65,7 +65,7 @@ module.exports = (router) => {
       if (req.newVersion.major <= req.currentVersion.major &&
           req.newVersion.minor <= req.currentVersion.minor &&
           req.newVersion.patch <= req.currentVersion.patch) {
-        return res.json('Update rejected: needs newer version number')
+        return res.status(400).json({msg: 'Update rejected: needs newer version number'})
       }
       console.log('okay to update')
       next()
