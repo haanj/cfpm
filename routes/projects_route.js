@@ -4,10 +4,10 @@ let authenticate = require('../lib/authenticate')
 let projectLookup = require('../lib/projectLookup')
 let addPackage = require('../lib/addPackage')
 let updatePackage =require('../lib/updatePackage')
-let fs = require('fs')
 let formidable = require('formidable')
 let util = require('util')
 
+// TODO: move authenticate and projectLookup to .all() to cleanup routes
 module.exports = (router) => {
   // Accepts new projects
   router.route('/projects')
@@ -59,9 +59,13 @@ module.exports = (router) => {
     .put((req, res, next) => {
       // checks that user is original author
       if (req.user.userName != req.currentAuthor) return res.json('Update rejected: incorrect user')
+      if (req.currentVersion.major == 0 &&
+          req.currentVersion.minor == 0 &&
+          req.currentVersion.patch == 0) {
+        return res.status(400).json({msg: 'Package does not currently exist'})
+      }
 
-      console.log(req.newVersion)
-      console.log(req.currentVersion)
+
       if (req.newVersion.major <= req.currentVersion.major &&
           req.newVersion.minor <= req.currentVersion.minor &&
           req.newVersion.patch <= req.currentVersion.patch) {
