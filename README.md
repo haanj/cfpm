@@ -8,7 +8,7 @@ Code Fellows Package Manager was created by Joshua Haan and Seth Moore for Code 
 
 - Files only accessible through CRUD routes: potential for private packages
 - Installable through NPM
-- Corresponding CLI
+- Corresponding [CLI](https://github.com/setheid/cfpm-cli)
 - Version control: publish and request specific versions
 - Author authorization
 
