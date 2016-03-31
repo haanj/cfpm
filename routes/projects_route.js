@@ -38,15 +38,28 @@ module.exports = (router) => {
       let form = new formidable.IncomingForm()
       form.uploadDir = __dirname + '/../data/'
       form.keepExtensions = true
-      form.parse(req, function(err, fields, files) {
-        let path = files.file.path
-        let archiveName = path.substring(path.lastIndexOf('upload'))
-        req.archiveUri = 'data/' + archiveName
-        addPackage(req)
-        res.writeHead(200, {'content-type': 'text/plain'})
-        res.write('received upload:\n\n')
-        res.end(util.inspect({fields: fields, files: files}))
-      })
+      try {
+        form.parse(req, function(err, fields, files) {
+          if (err) return res.status(400).json({msg: err})
+          try{
+            let path = files.file.path
+            let archiveName = path.substring(path.lastIndexOf('upload'))
+            req.archiveUri = 'data/' + archiveName
+            addPackage(req)
+            res.writeHead(200, {'content-type': 'text/plain'})
+            res.write('received upload:\n\n')
+            res.end(util.inspect({fields: fields, files: files}))
+          }
+          catch (err) {
+            console.log(err)
+            return res.status(400).json({msg: 'Improper data stream'})
+          }
+        })
+      }
+      catch (err) {
+        console.log(err)
+        return res.status(400).json({msg: err})
+      }
     })
 
     .put((req, res, next) => {
