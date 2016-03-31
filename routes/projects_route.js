@@ -58,7 +58,14 @@ module.exports = (router) => {
     // TODO: dont allow updates to non-existing packages
     .put((req, res, next) => {
       // checks that user is original author
-      if (req.user.userName != req.currentAuthor) return res.json('Update rejected: incorrect user')
+      if (req.user.userName != req.currentAuthor) return res.status(400).json({msg: 'Update rejected: incorrect user'})
+      // checks that new version is incremental
+      if (req.newVersion.major <= req.currentVersion.major &&
+        req.newVersion.minor <= req.currentVersion.minor &&
+        req.newVersion.patch <= req.currentVersion.patch) {
+        return res.status(400).json({msg: 'Update rejected: needs newer version number'})
+      }
+      // Checks that package already exists in system
       if (req.currentVersion.major == 0 &&
           req.currentVersion.minor == 0 &&
           req.currentVersion.patch == 0) {
@@ -66,11 +73,6 @@ module.exports = (router) => {
       }
 
 
-      if (req.newVersion.major <= req.currentVersion.major &&
-          req.newVersion.minor <= req.currentVersion.minor &&
-          req.newVersion.patch <= req.currentVersion.patch) {
-        return res.status(400).json({msg: 'Update rejected: needs newer version number'})
-      }
       console.log('okay to update')
       next()
     })
