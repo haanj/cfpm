@@ -26,6 +26,7 @@ module.exports.S_PORT = 3000
 #### Routes
 
 Using the CLI is recommended, but CFPM can take HTTP requests from custom clients fairly easily.
+
 `npm i -g cfpm-cli`
 
 
